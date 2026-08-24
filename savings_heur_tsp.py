@@ -1,6 +1,7 @@
 def savings_heur_tsp(cost_matrix):
   num_nodes = len(cost_matrix)
   
+  # Find the starting-node with the minimum total-cost to all other nodes
   start_node = min(range(num_nodes), key=lambda i: sum(cost_matrix[i]))
   
   # Calculate savings for all pairs (i, j) where i != j
@@ -17,36 +18,41 @@ def savings_heur_tsp(cost_matrix):
   # Sort savings in descending-order
   savings.sort(key=lambda x: x[0], reverse=True)
   
-  tour_nodes = [[i, 2] for i in other_nodes]
+  for i in range(num_nodes):
+    cost_matrix[i].extend([1, 1])
+    # cost_matrix[i].append(1)
+  cost_matrix[start_node][-2] = 0
+  cost_matrix[start_node][-1] = 0
+  # tour_nodes = [[i, 2] for i in other_nodes]
   tour_edges = []
   final_tour = []
+  
   for s_val, i, j in savings:
     if len(tour_edges) >= (num_nodes - 2):
       break
     # Check if adding this edge would create a cycle (except for the final edge)
-    if tour_nodes[i][1] <= 0 and tour_nodes[j][1] <= 0:
-      continue
-    if [i, j] in tour_edges or [j, i] in tour_edges:
-      continue
     
-    tour_edges.append([i, j])
-    tour_nodes[i][1] -= 1
-    tour_nodes[j][1] -= 1
+    if cost_matrix[i][-2] < 1 or cost_matrix[j][-1] < 1:
+      continue
+    '''if [i, j] in tour_edges or [j, i] in tour_edges:
+      continue'''
+    
+    tour_edges.append((i, j))
+    cost_matrix[i][-2] -= 1
+    cost_matrix[j][-1] -= 1
   
-  for edge in tour_edges:
-    if not final_tour:
-      final_tour.extend(edge)
-    else:
-      if edge[0] == final_tour[-1]:
-        final_tour.append(edge[1])
-      elif edge[1] == final_tour[-1]:
-        final_tour.append(edge[0])
-      elif edge[0] == final_tour[0]:
-        final_tour.insert(0, edge[1])
-      elif edge[1] == final_tour[0]:
-        final_tour.insert(0, edge[0])
-      
-  final_tour.append(start_node)
+  indexi = next((i for i, row in enumerate(cost_matrix) if row[-2] > 0), None)
+  indexj = next((j for j, row in enumerate(cost_matrix) if row[-1] > 0), None)
+  tour_edges.extend([(indexi, start_node), (start_node, indexj)])
+  # tour_edges.append
+  
+  final_tour.extend(tour_edges.pop(0))
+  while len(tour_edges) > 1:
+    nextnode = final_tour[-1]
+    nextindex = next((i for i, edge in enumerate(tour_edges) if edge[0] == nextnode), None)
+    final_tour.append(tour_edges.pop(nextindex)[1])
+  # final_tour.pop()
+  # append(start_node)
   
   return final_tour
   
@@ -96,7 +102,9 @@ def savings_heur_tsp(cost_matrix):
 if __name__ == "__main__":
   import sys
   input_data = sys.stdin.read().strip().split("\n")
-  cost_lines = input_data[(int(input_data[1]) + 2):]
+  num_nodes = int(input_data[1])
+  print(" ".join(map(str, range(num_nodes))))
+  cost_lines = input_data[(num_nodes + 2):]
   cost_matrix = [list(map(float, line.split())) for line in cost_lines]
   tour = savings_heur_tsp(cost_matrix)
   print(" ".join(map(str, tour)))
