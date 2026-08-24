@@ -39,30 +39,38 @@ def savings_heur_tsp(cost_matrix):
   for s_val, i, j in savings:
     if len(tour_edges) >= (num_nodes - 2):
       break
-    # Check if adding this edge would create a cycle (except for the final edge)
     
+    # Each node should have only two edges
     if (cost_matrix[i][-2] < 1) or (cost_matrix[j][-1] < 1):
       continue
     if (j, i) in tour_edges:
       continue
     # (i, j) in tour_edges or 
+    
     if (cost_matrix[i][-1] < 1) and (cost_matrix[j][-2] < 1):
       # Check if adding this edge would create a cycle (except for the final edge)
-      tour_edges_copy = tour_edges[:] + [(i, j)]
+      tour_edges_copy = tour_edges[:]
+      # + [(i, j)]
       # tour_edges_copy.append((i, j))
-      for edge in tour_edges_copy:
-        sub_tour = [edge[0], edge[1]]
-        tour_edges_copy.pop(0)
-        nextnode = sub_tour[-1]
-        while sub_tour[0] != nextnode:
-          nextindex = next((k for k, edge in enumerate(tour_edges_copy) if edge[0] == nextnode), None)
-          if nextindex is None:
-            sub_tour.clear()
-            break
-          sub_tour.append(tour_edges_copy.pop(nextindex)[1])
-          nextnode = sub_tour[-1]
+      
+      sub_tour = []
+      nextnode = j
+      while i != nextnode:
+        nextindex = next((k for k, edge in enumerate(tour_edges_copy) if edge[0] == nextnode), None)
+        if nextindex is None:
+          sub_tour.clear()
+          break
+        nextnode = tour_edges_copy[nextindex][1]
+        sub_tour.append(nextnode)
+        # sub_tour[-1]
       if sub_tour:
         continue
+        
+      # for edge in tour_edges_copy:
+        # edge[0], edge[1]]
+        # tour_edges_copy.pop(0)
+        # sub_tour[-1]
+        # sub_tour[0] 
     
     tour_edges.append((i, j))
     cost_matrix[i][-2] -= 1
