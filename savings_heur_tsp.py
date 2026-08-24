@@ -1,3 +1,4 @@
+# Edge-Savings heuristic algorithm for travelling-salesman-problem.
 def savings_heur_tsp(cost_matrix):
   num_nodes = len(cost_matrix)
   
@@ -72,6 +73,7 @@ def savings_heur_tsp(cost_matrix):
         # sub_tour[-1]
         # sub_tour[0] 
     
+    # Add the tour-edge and decrease the in and out edge-counts of the nodes
     tour_edges.append((i, j))
     cost_matrix[i][-2] -= 1
     cost_matrix[j][-1] -= 1
@@ -159,7 +161,7 @@ if __name__ == "__main__":
   # print(len(input_data))
   # print(input_data[-1])
   
-  # Initial-try valid-tour
+  # Initial-backup valid-tour
   print(" ".join(map(str, range(num_nodes))))
   # Cost-matrix in the input-data
   cost_lines = input_data[(num_nodes + 2):]
