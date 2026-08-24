@@ -152,7 +152,8 @@ def savings_heur_tsp(cost_matrix):
     if len(routes) == 1:
       break
 
-  final_tour = [start_node] + routes[0] '''
+  final_tour = [start_node] + routes[0]
+  return final_tour'''
 
 if __name__ == "__main__":
   import sys
