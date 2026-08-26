@@ -1,10 +1,41 @@
+import sys, random
+  
 # Edge-Savings heuristic algorithm for travelling-salesman-problem.
 def savings_heur_tsp(cost_matrix):
   num_nodes = len(cost_matrix)
   
   # Find the starting-node with the minimum total-cost to all other nodes
-  start_node = min(range(num_nodes), key=lambda i: sum(cost_matrix[i]))
+  # start_node = min(range(num_nodes), key=lambda i: sum(cost_matrix[i]))
   
+  # Calculate total costs for each node
+  node_costs = [(i, sum(row)) for i, row in enumerate(cost_matrix)]
+
+  # Sort nodes by total cost in ascending order
+  sorted_nodes = sorted(node_costs, key=lambda x: x[1], reverse=False)
+  
+  min_tour_cost = 0
+  # Select node with the minimum total cost
+  for i in range(min(500, num_nodes)):
+    if i and i%2 and len(sorted_nodes) > 1:
+      start_node = sorted_nodes.pop(random.randint(1, (len(sorted_nodes) - 1)))[0]
+    else:
+      start_node = sorted_nodes.pop(0)[0]
+    
+    # Construct a tour starting from the selected node
+    (final_tour, tour_cost) = construct_tour(start_node, cost_matrix)
+    
+    if (not min_tour_cost) or (tour_cost < min_tour_cost):
+      min_tour_cost = tour_cost
+      print("Tour-cost: ", tour_cost, ", Start-node: ", start_node)
+      print(" ".join(map(str, final_tour)))
+      continue
+
+  del final_tour, tour_cost
+  final_tour = []
+  tour_cost = 0
+
+# Construct a tour using the savings-heuristic, starting from a given node
+def construct_tour(start_node, cost_matrix):
   # Calculate savings for all pairs (i, j) where i != j
   savings = []
   other_nodes = [n for n in range(num_nodes) if n != start_node]
@@ -90,8 +121,6 @@ def savings_heur_tsp(cost_matrix):
   indexj = next((j for j, row in enumerate(cost_matrix) if row[-1] > 0))
   tour_edges.extend([(indexi, start_node), (start_node, indexj)])
   
-  del cost_matrix
-  cost_matrix = []
   # print(tour_edges)
   # tour_edges.append
   # print(savings)
@@ -108,8 +137,17 @@ def savings_heur_tsp(cost_matrix):
   # append(start_node)
   del tour_edges
   tour_edges = []
+  # print(len(final_tour), num_nodes, sep=", ")
+
+  # Calculate the total cost of the generated-tour
+  tour_cost = sum(cost_matrix[(final_tour[k])][(final_tour[k+1])] for k in range(len(final_tour) - 1))
+  # Add cost to return to start node
+  tour_cost += cost_matrix[(final_tour[-1])][(final_tour[0])]
   
-  return final_tour
+  del cost_matrix
+  cost_matrix = []
+
+  return final_tour, tour_cost
   
   ''' # Track the routes.
   routes = [[i] for i in other_nodes]
@@ -156,14 +194,13 @@ def savings_heur_tsp(cost_matrix):
   return final_tour'''
 
 if __name__ == "__main__":
-  import sys
   input_data = sys.stdin.read().strip().split("\n")
   num_nodes = int(input_data[1])
   # print(len(input_data))
   # print(input_data[-1])
   
   # Initial-backup valid-tour
-  print(" ".join(map(str, range(num_nodes))))
+  # print(" ".join(map(str, range(num_nodes))))
   # Cost-matrix in the input-data
   cost_lines = input_data[(num_nodes + 2):]
   
@@ -176,13 +213,12 @@ if __name__ == "__main__":
   del cost_lines
   cost_lines = []
   
-  tour = savings_heur_tsp(cost_matrix)
+  savings_heur_tsp(cost_matrix)
   
   del cost_matrix
   cost_matrix = []
   
-  print(" ".join(map(str, tour)))
+  # print(" ".join(map(str, tour)))
   
-  del tour
-  tour = []
-  # range(len(cost_matrix)))))
+  # del tour
+  # tour = []
