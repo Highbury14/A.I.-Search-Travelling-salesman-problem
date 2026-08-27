@@ -22,7 +22,7 @@ def savings_heur_tsp(cost_matrix):
 
   # Select node with the minimum total cost
   for i in range(min(MAX_ITERATIONS, num_nodes)):
-    if (time.time() - start_time) > MAX_EXECUTION_TIME:
+    if i and (time.time() - start_time) > MAX_EXECUTION_TIME:
       break
     if i and i%4==2 and len(sorted_nodes) > 1:
       # Random-exploration element in search-strategy
