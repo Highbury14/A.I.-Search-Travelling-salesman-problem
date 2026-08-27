@@ -38,7 +38,7 @@ It is observed in the test-runs listed above, that the lowest-cost valid-tours a
 
 The best and lowest-cost valid-tours for all test-cases are found in the final test-run, where the savings-heuristic algorithm was iteratively run with all given nodes as the starting-node in each test-case. (The maximum-iteration limit was set to 100 in the final test-run listed above.)
 
-These results indicate that the node closest to the geometric-center of all the node-locations is not necessarily the best starting-node for generating the lowest-cost valid-tour using the savings-heuristic algorithm.
+These results indicate that the node with the lowest total-cost to all other nodes, ( node closest to the geometric-center of all the node-locations in euclidean t.s.p. ), is not necessarily the best starting-node for generating the lowest-cost valid-tour using the savings-heuristic algorithm.
 
 ## Savings-heuristic algorithm logic :
 
