@@ -14,7 +14,11 @@ The lowest tour-cost valid-tour generated from all the iterations, is found.
 
 The iterations start, using the sorted nodes-list for starting-node, but also sometimes use randomly-selected starting-nodes to introduce an element of exploration in the search-algorithm strategy.
 
+In certain iterations, the starting-node is also selected from the middle or bottom of the sorted nodes-list.
+
 The same savings-heuristic algoritm works for both euclidean and non-euclidean travelling-salesman problems.
+
+A maximum-iterations-limit (150) and maximum-execution-time-limit (50 seconds) are also set in the script, for handling huge input data-sets and test-cases.
 
 ## Test-run results for the 8 test-cases given in the validator for travelling-salesman problem.
 
@@ -30,9 +34,11 @@ The same savings-heuristic algoritm works for both euclidean and non-euclidean t
 
 The starting-node selected for each tour-generation in the above results, is mentioned inside paranthesis next to each tour-cost.
 
-It is observed that the lowest-cost valid-tours are found in the test-runs listed above, after greater number of iterations on different starting-nodes.
+It is observed in the test-runs listed above, that the lowest-cost valid-tours are found after greater number of iterations on different starting-nodes.
 
 The best and lowest-cost valid-tours for all test-cases are found in the final test-run, where the savings-heuristic algorithm was iteratively run with all given nodes as the starting-node in each test-case. (The maximum-iteration limit was set to 100 in the final test-run listed above.)
+
+These results indicate that the node closest to the geometric-center of all the node-locations is not necessarily the best starting-node for generating the lowest-cost valid-tour using the savings-heuristic algorithm.
 
 ## Savings-heuristic algorithm logic :
 

@@ -1,9 +1,11 @@
-import sys, random
+import sys, random, time
   
 # Edge-Savings heuristic algorithm for travelling-salesman-problem.
 def savings_heur_tsp(cost_matrix):
   num_nodes = len(cost_matrix)
-  
+  MAX_ITERATIONS = 150
+  MAX_EXECUTION_TIME = 50
+
   # Find the starting-node with the minimum total-cost to all other nodes
   # start_node = min(range(num_nodes), key=lambda i: sum(cost_matrix[i]))
   
@@ -14,10 +16,21 @@ def savings_heur_tsp(cost_matrix):
   sorted_nodes = sorted(node_costs, key=lambda x: x[1], reverse=False)
   
   min_tour_cost = 0
+  tour_cost = 0
+  start_time = time.time()
+  final_tour = []
+
   # Select node with the minimum total cost
-  for i in range(min(500, num_nodes)):
-    if i and i%2 and len(sorted_nodes) > 1:
+  for i in range(min(MAX_ITERATIONS, num_nodes)):
+    if (time.time() - start_time) > MAX_EXECUTION_TIME:
+      break
+    if i and i%4==2 and len(sorted_nodes) > 1:
+      # Random-exploration element in search-strategy
       start_node = sorted_nodes.pop(random.randint(1, (len(sorted_nodes) - 1)))[0]
+    elif i and i%4==3:
+      start_node = sorted_nodes.pop()[0]
+    elif i and i%4==0:
+      start_node = sorted_nodes.pop(int(len(sorted_nodes)/2))[0]
     else:
       start_node = sorted_nodes.pop(0)[0]
     
@@ -26,13 +39,12 @@ def savings_heur_tsp(cost_matrix):
     
     if (not min_tour_cost) or (tour_cost < min_tour_cost):
       min_tour_cost = tour_cost
-      print("Tour-cost: ", tour_cost, ", Start-node: ", start_node)
+      # print("Tour-cost: ", tour_cost, ", Start-node: ", start_node)
       print(" ".join(map(str, final_tour)))
-      continue
 
-  del final_tour, tour_cost
-  final_tour = []
-  tour_cost = 0
+    del final_tour, tour_cost
+    final_tour = []
+    tour_cost = 0
 
 # Construct a tour using the savings-heuristic, starting from a given node
 def construct_tour(start_node, cost_matrix):
@@ -148,50 +160,6 @@ def construct_tour(start_node, cost_matrix):
   cost_matrix = []
 
   return final_tour, tour_cost
-  
-  ''' # Track the routes.
-  routes = [[i] for i in other_nodes]
-  
-  def find_route(node):
-    # Helper to find which partial route contains a given node.
-    for r in routes:
-      if node in r:
-        return r
-    return None
-
-  # Merge routes based on sorted savings
-  for s_val, i, j in savings:
-    route_i = find_route(i)
-    route_j = find_route(j)
-    
-    # Nodes must be in different sub-routes to be merged
-    if route_i != route_j:
-      # Condition: i and j must be outer endpoints of their respective paths
-      i_is_end = (route_i[0] == i or route_i[-1] == i)
-      j_is_end = (route_j[0] == j or route_j[-1] == j)
-      
-      if i_is_end and j_is_end:
-        if route_i[-1] == i:
-          part_1 = route_i
-        else:
-          part_1 = route_i[::-1] # Reverse if i was at the start
-          
-        if route_j[0] == j:
-          part_2 = route_j
-        else:
-          part_2 = route_j[::-1] # Reverse if j was at the end
-        
-        # Merge the two list structures
-        new_route = part_1 + part_2
-        routes.remove(route_i)
-        routes.remove(route_j)
-        routes.append(new_route)
-    
-    if len(routes) == 1:
-      break
-
-  final_tour = [start_node] + routes[0]
-  return final_tour'''
 
 if __name__ == "__main__":
   input_data = sys.stdin.read().strip().split("\n")
