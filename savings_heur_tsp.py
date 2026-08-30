@@ -163,7 +163,19 @@ def construct_tour(start_node, cost_matrix):
 
 if __name__ == "__main__":
   input_data = sys.stdin.read().strip().split("\n")
-  num_nodes = int(input_data[1])
+  if not input_data or len(input_data) < 2:
+    print("No input data provided.")
+    sys.exit(1)
+
+  try:
+    num_nodes = int(input_data[1])
+  except ValueError:
+    print("Invalid number of nodes.")
+    sys.exit(1)
+  
+  if num_nodes < 2 or len(input_data) < ((2 * num_nodes) + 2):
+    print("Number of nodes must be at least 2.")
+    sys.exit(1)
   # print(len(input_data))
   # print(input_data[-1])
   
@@ -175,11 +187,27 @@ if __name__ == "__main__":
   del input_data
   input_data = []
   
-  # Cost-matrix values
-  cost_matrix = [list(map(float, line.split())) for line in cost_lines]
-  
+  # Cost-matrix values; Convert values to absolute floating-point numbers
+  try:
+    cost_matrix = [
+      list(map(lambda x: abs(float(x)), line.split())) for line in cost_lines
+    ]
+  except ValueError:
+    print("Invalid value in the cost matrix. All values must be numeric.")
+    sys.exit(1)
+
   del cost_lines
   cost_lines = []
+
+  # Check if the cost_matrix contains only zeros
+  if all(all(value == 0 for value in row) for row in cost_matrix):
+    print("The cost_matrix contains only zeros.")
+    sys.exit(1)
+  
+  # Check if the cost_matrix has num_nodes rows and columns
+  if len(cost_matrix) != num_nodes or any(len(row) != num_nodes for row in cost_matrix):
+    print("The cost_matrix does not have the correct square-dimensions.")
+    sys.exit(1)
   
   savings_heur_tsp(cost_matrix)
   
