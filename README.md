@@ -45,6 +45,10 @@ A **maximum-iterations-limit (150)** and **maximum-execution-time-limit (50 seco
 
 The starting-node selected for each tour-generation in the above results, is mentioned inside paranthesis () next to each tour-cost.
 
+<img src="./T.S.P tour-costs generated for test-cases in validator.svg" height="1100"/>
+
+(Image-source: Line-chart visualisation from validator-tests results-table in google-sheet; https://docs.google.com/spreadsheets/d/1yp_jYd30vz6CLlG34jS72RvESLR81yqn4IaCfC2dEnM/) <sup>5.</sup>
+
 It is observed in the test-runs listed above, that the lowest-cost valid-tours are found after greater number of iterations on different starting-nodes.
 
 The best and lowest-cost valid-tours for all test-cases are found in the final test-run (**No. 7**) listed above, where the savings-heuristic algorithm was iteratively run with all given nodes as the starting-node in each test-case. (The maximum-iteration limit was set to 100 in the final test-run listed above.)
@@ -73,11 +77,13 @@ The best and lowest-cost valid-tours for all test-cases are found in the final t
 
 1. Week-3 Lecture-4:'Solution-space search', minute-16, Course-ID: BSCS3003, '**A.I.- Search-methods in problem-solving**', Prof. Deepak Khemani
 
-2. Deepak Khemani. '**A First Course in Artificial Intelligence**', McGraw Hill Education (India), 2013; Chapter-4.4.1: 'Constructive-methods for the Travelling-salesman problem'.
+2. Deepak Khemani. '**A First Course in Artificial Intelligence**', McGraw Hill Education (India), 2013; Chapter-4.4.1: 'Constructive-methods for the Travelling-salesman problem', p94-p95.
 
 3. Clarke, G., & Wright, J. W. (1964). '**Scheduling of vehicles from a central depot to a number of delivery points**'. Operations Research, 12(4), 568-581.
 
 4. Week-4 Lecture-2:'Stochastic local search', minute-2, Course-ID: BSCS3003, '**A.I.- Search-methods in problem-solving**', Prof. Deepak Khemani
+
+5. Validator test-results line-chart visualisation in google-sheets; https://docs.google.com/spreadsheets/d/1yp_jYd30vz6CLlG34jS72RvESLR81yqn4IaCfC2dEnM/
 
 ## Declaration :
 
